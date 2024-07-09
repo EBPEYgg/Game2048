@@ -8,6 +8,7 @@ namespace Game2048.Model.Services
 {
     public class ValueToColorConverter : IValueConverter
     {
+        #region Colors
         private static readonly SolidColorBrush tile2Brush = GetSolidColorBrush(192, 192, 192, 255);
         private static readonly SolidColorBrush tile4Brush = GetSolidColorBrush(169, 169, 169, 255);
         private static readonly SolidColorBrush tile8Brush = GetSolidColorBrush(100, 149, 237, 255);
@@ -20,6 +21,7 @@ namespace Game2048.Model.Services
         private static readonly SolidColorBrush tile1024Brush = GetSolidColorBrush(255, 140, 0, 255);
         private static readonly SolidColorBrush tile2048Brush = GetSolidColorBrush(255, 69, 0, 255);
         private static readonly SolidColorBrush tileEmptyBrush = GetSolidColorBrush(18, 18, 18, 255);
+        #endregion
 
         private static readonly Dictionary<string, Brush> tileBrushes = new()
         {
@@ -36,6 +38,15 @@ namespace Game2048.Model.Services
             { "2048", tile2048Brush },
         };
 
+        /// <summary>
+        /// Метод, представляющий собой конвертер, который преобразует 
+        /// числовое значение в цвет.
+        /// </summary>
+        /// <param name="value">Входящее числовое значение.</param>
+        /// <param name="targetType">Тип, в который будет преобразовано значение.</param>
+        /// <param name="parameter">Необязательный параметр, используемый при преобразовании.</param>
+        /// <param name="cultureInfo">Язык, который будет использоваться в конвертере.</param>
+        /// <returns>Цвет, если число является степенью двойки от 1 до 11, иначе false.</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo cultureInfo)
         {
             if (tileBrushes.TryGetValue(value as string, out Brush brush))
@@ -49,16 +60,40 @@ namespace Game2048.Model.Services
             }
         }
 
+        /// <summary>
+        /// ConverterBack не поддерживается.
+        /// </summary>
+        /// <param name="value">Значение для обратного преобразования.</param>
+        /// <param name="targetType">Тип, к которому значение будет преобразовано обратно.</param>
+        /// <param name="parameter">Необязательный параметр, используемый при преобразовании.</param>
+        /// <param name="culture">Язык, который будет использоваться в конвертере.</param>
+        /// <returns>Вызывает исключение NotSupportedException.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo cultureInfo)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Метод, получающий цвет для сплошного закрашивания ячейки.
+        /// </summary>
+        /// <param name="r">Red.</param>
+        /// <param name="g">Green.</param>
+        /// <param name="b">Blue.</param>
+        /// <param name="a">Alpha.</param>
+        /// <returns>Цвет.</returns>
         private static SolidColorBrush GetSolidColorBrush(byte r, byte g, byte b, byte a)
         {
             return new SolidColorBrush(GetColor(r, g, b, a));
         }
 
+        /// <summary>
+        /// Метод, получающий цвет.
+        /// </summary>
+        /// <param name="r">Red.</param>
+        /// <param name="g">Green.</param>
+        /// <param name="b">Blue.</param>
+        /// <param name="a">Alpha.</param>
+        /// <returns>Цвет.</returns>
         private static Color GetColor(byte r, byte g, byte b, byte a)
         {
             return new Color { R = r, G = g, B = b, A = a };

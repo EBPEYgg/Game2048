@@ -1,5 +1,4 @@
-﻿using Game2048.ViewModel;
-using Game2048.Model;
+﻿using Game2048.Model;
 using System;
 using System.Windows;
 
@@ -7,12 +6,18 @@ namespace Game2048.ViewModel
 {
     public class GameVM : MainVM
     {
+        /// <summary>
+        /// Инициализация игровой доски.
+        /// </summary>
         private GameBoard gameBoard;
 
+        /// <summary>
+        /// Инициализация генератора чисел.
+        /// </summary>
         private Random random;
 
         /// <summary>
-        /// Возвращает доску в игре.
+        /// Возвращает значения доски.
         /// </summary>
         public int[,] Board
         {
@@ -21,7 +26,7 @@ namespace Game2048.ViewModel
         }
 
         /// <summary>
-        /// Возвращает очки в игре.
+        /// Возвращает счет игры.
         /// </summary>
         public int Score
         { 
@@ -94,11 +99,11 @@ namespace Game2048.ViewModel
         /// <returns>True, если выиграл, иначе false.</returns>
         public bool IsPlayerWin()
         {
-            for (int row = 0; row < gameBoard.boardSize; row++)
+            for (int row = 0; row < gameBoard.BoardSize; row++)
             {
-                for (int column = 0; column < gameBoard.boardSize; column++)
+                for (int column = 0; column < gameBoard.BoardSize; column++)
                 {
-                    if (gameBoard.board[row, column] == gameBoard.winValue)
+                    if (gameBoard.board[row, column] == gameBoard.WinValue)
                     {
                         return true;
                     }
@@ -114,9 +119,9 @@ namespace Game2048.ViewModel
         /// <returns>True, если проиграл, иначе false.</returns>
         public bool IsPlayerLosing()
         {
-            for (int row = 0; row < gameBoard.boardSize; row++)
+            for (int row = 0; row < gameBoard.BoardSize; row++)
             {
-                for (int column = 0; column < gameBoard.boardSize; column++)
+                for (int column = 0; column < gameBoard.BoardSize; column++)
                 {
                     if (gameBoard.board[row, column] == 0)
                     {
@@ -125,9 +130,9 @@ namespace Game2048.ViewModel
                 }
             }
 
-            for (int row = 0; row < gameBoard.boardSize; row++)
+            for (int row = 0; row < gameBoard.BoardSize; row++)
             {
-                for (int column = 0; column < gameBoard.boardSize; column++)
+                for (int column = 0; column < gameBoard.BoardSize; column++)
                 {
                     int value = gameBoard.board[row, column];
 
@@ -136,7 +141,7 @@ namespace Game2048.ViewModel
                         return false;
                     }
 
-                    if (row < gameBoard.boardSize - 1 && gameBoard.board[row + 1, column] == value)
+                    if (row < gameBoard.BoardSize - 1 && gameBoard.board[row + 1, column] == value)
                     {
                         return false;
                     }
@@ -146,7 +151,7 @@ namespace Game2048.ViewModel
                         return false;
                     }
 
-                    if (column < gameBoard.boardSize - 1 && gameBoard.board[row, column + 1] == value)
+                    if (column < gameBoard.BoardSize - 1 && gameBoard.board[row, column + 1] == value)
                     {
                         return false;
                     }
@@ -161,21 +166,24 @@ namespace Game2048.ViewModel
         /// </summary>
         private void Reset()
         {
-            Board = new int[gameBoard.boardSize, gameBoard.boardSize];
+            Board = new int[gameBoard.BoardSize, gameBoard.BoardSize];
             Score = 0;
             GenerateRandomNumber();
             GenerateRandomNumber();
             Update();
         }
 
+        /// <summary>
+        /// Метод, который генерирует ячейку на доске.
+        /// </summary>
         private void GenerateRandomNumber()
         {
             int row, col;
 
             do
             {
-                row = random.Next(gameBoard.boardSize);
-                col = random.Next(gameBoard.boardSize);
+                row = random.Next(gameBoard.BoardSize);
+                col = random.Next(gameBoard.BoardSize);
             }
             while (gameBoard.board[row, col] != 0);
 
@@ -191,6 +199,9 @@ namespace Game2048.ViewModel
             Score = gameBoard.Score;
         }
 
+        /// <summary>
+        /// Метод, отвечающий за сдвиг влево.
+        /// </summary>
         public void ShiftLeft()
         {
             bool shifted = false;
@@ -230,6 +241,9 @@ namespace Game2048.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод, отвечающий за сдвиг вверх.
+        /// </summary>
         public void ShiftUp()
         {
             bool shifted = false;
@@ -269,12 +283,15 @@ namespace Game2048.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод, отвечающий за сдвиг вправо.
+        /// </summary>
         public void ShiftRight()
         {
             bool shifted = false;
             for (int i = 0; i < gameBoard.board.GetLength(0); i++)
             {
-                int index = 0;
+                int index = gameBoard.board.GetLength(1) - 1;
                 for (int j = gameBoard.board.GetLength(1) - 1; j >= 0; j--)
                 {
                     if (gameBoard.board[i, j] != 0)
@@ -309,6 +326,9 @@ namespace Game2048.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод, отвечающий за сдвиг вниз.
+        /// </summary>
         public void ShiftBottom()
         {
             bool shifted = false;
@@ -349,6 +369,9 @@ namespace Game2048.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод, который проверяет состояние игры.
+        /// </summary>
         private void CheckGameState()
         {
             Update();
@@ -366,6 +389,9 @@ namespace Game2048.ViewModel
             }
         }
 
+        /// <summary>
+        /// Метод, который добавляет результат пользователя в таблицу лидеров.
+        /// </summary>
         private void AddToStatistics()
         {
             string name;

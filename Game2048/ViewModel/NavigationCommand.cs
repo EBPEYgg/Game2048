@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Game2048.ViewModel
 {
@@ -15,7 +14,7 @@ namespace Game2048.ViewModel
         private readonly Action<Page, Uri> _executeAction;
 
         /// <summary>
-        /// Uri.
+        /// Путь к файлу.
         /// </summary>
         private readonly Uri _uri;
 

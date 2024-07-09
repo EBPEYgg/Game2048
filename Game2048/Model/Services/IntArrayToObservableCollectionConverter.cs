@@ -7,6 +7,15 @@ namespace Game2048.Model.Services
 {
     public class IntArrayToObservableCollectionConverter : IValueConverter
     {
+        /// <summary>
+        /// Метод, представляющий собой конвертер, который преобразует 
+        /// массив чисел в <see cref="ObservableCollection{T}"/>.
+        /// </summary>
+        /// <param name="value">Массив чисел.</param>
+        /// <param name="targetType">Тип, в который будет преобразовано значение.</param>
+        /// <param name="parameter">Необязательный параметр, используемый при преобразовании.</param>
+        /// <param name="cultureInfo">Язык, который будет использоваться в конвертере.</param>
+        /// <returns>ObservableCollection если true, иначе false.</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo cultureInfo)
         {
             if (value is not int[,] intArray)
@@ -29,9 +38,17 @@ namespace Game2048.Model.Services
             return observableCollection;
         }
 
+        /// <summary>
+        /// ConverterBack не поддерживается.
+        /// </summary>
+        /// <param name="value">Значение для обратного преобразования.</param>
+        /// <param name="targetType">Тип, к которому значение будет преобразовано обратно.</param>
+        /// <param name="parameter">Необязательный параметр, используемый при преобразовании.</param>
+        /// <param name="culture">Язык, который будет использоваться в конвертере.</param>
+        /// <returns>Вызывает исключение NotSupportedException.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo cultureInfo)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
