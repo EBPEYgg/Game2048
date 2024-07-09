@@ -1,6 +1,4 @@
-﻿//using Game2048.Model;
-//using Game2048.Model.Services;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;

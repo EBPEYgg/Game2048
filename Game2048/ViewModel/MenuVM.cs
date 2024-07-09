@@ -1,5 +1,4 @@
 ﻿using System;
-using Game2048.ViewModel;
 
 namespace Game2048.ViewModel
 {
