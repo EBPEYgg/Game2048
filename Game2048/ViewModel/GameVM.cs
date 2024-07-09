@@ -22,7 +22,7 @@ namespace Game2048.ViewModel
         public int[,] Board
         {
             get => gameBoard.board;
-            private set => Set(ref gameBoard.board, value, nameof(Board));
+            private set => Set(ref gameBoard.board, value);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Game2048.ViewModel
         public int Score
         { 
             get => gameBoard.score; 
-            private set => Set(ref gameBoard.score, value, nameof(Score));
+            private set => Set(ref gameBoard.score, value);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -25,13 +26,13 @@ namespace Game2048.ViewModel
         /// Метод, который вызывает событие <see cref="PropertyChanged"/>.
         /// </summary>
         /// <param name="propertyName">Название измененного свойства.</param>
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        protected bool Set<T>(ref T field, T value, string propertyName)
+        protected bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             field = value;
-            OnPropertyChanged(nameof(propertyName));
+            OnPropertyChanged(propertyName);
             return true;
         }
 

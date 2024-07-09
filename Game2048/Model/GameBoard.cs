@@ -27,11 +27,11 @@ namespace Game2048.Model
         /// <summary>
         /// Возвращает и задает значения ячеек на доске.
         /// </summary>
-        public int[,]? Board { get => board; set => Set(ref board, value, nameof(Board)); }
+        public int[,]? Board { get => board; set => Set(ref board, value); }
         
         /// <summary>
         /// Возвращает и задает счет.
         /// </summary>
-        public int Score { get => score; set => Set(ref score, value, nameof(Score)); }
+        public int Score { get => score; set => Set(ref score, value); }
     }
 }
