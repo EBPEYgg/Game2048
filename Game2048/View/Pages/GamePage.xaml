@@ -1,0 +1,87 @@
+﻿<Page x:Class="Game2048.View.Pages.GamePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm="clr-namespace:Game2048.ViewModel"
+      xmlns:local="clr-namespace:Game2048.View.Pages"
+      xmlns:converters="clr-namespace:Game2048.Model.Services"
+      mc:Ignorable="d" Focusable="True">
+
+    <Page.DataContext>
+        <vm:GameVM/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <converters:ValueToColorConverter x:Key="ValueToColorConverter"/>
+        <converters:IntArrayToObservableCollectionConverter x:Key="IntArrayToObservableCollectionConverter"/>
+
+        <DataTemplate x:Key="CellTemplate">
+            <Border Style="{StaticResource CellBorderStyle}" Background="{Binding Converter={StaticResource ValueToColorConverter}}">
+                <TextBlock Style="{StaticResource CellTextBlockStyle}" TextAlignment="Center" Text="{Binding}"/>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BoardTemplate">
+            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource CellTemplate}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Key="Left" Command="{Binding ShiftLeftCommand}"/>
+        <KeyBinding Key="Up" Command="{Binding ShiftUpCommand}"/>
+        <KeyBinding Key="Right" Command="{Binding ShiftRightCommand}"/>
+        <KeyBinding Key="Down" Command="{Binding ShiftBottomCommand}"/>
+    </Page.InputBindings>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Style="{StaticResource SmallButtonStyle}" Grid.Row="1" Grid.Column="0" Command="{Binding NavigateToMenuPage}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}}">
+                <Image Source="/Resources/hamburger_blue_icon_128x128.png"/>
+            </Button>
+
+            <Button Style="{StaticResource SmallButtonStyle}" Grid.Row="1" Grid.Column="1" Command="{Binding ResetCommand}">
+                <Image Source="/Resources/repeat_blue_icon_128x128.png"/>
+            </Button>
+
+            <Border Style="{StaticResource InfoTabStyle}" Grid.Row="1" Grid.Column="3">
+                <TextBlock Style="{StaticResource InfoTabTextBlockStyle}" Text="{Binding Score, StringFormat='Score: {0}'}"></TextBlock>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource BoardBorderStyle}">
+            <ItemsControl ItemsSource="{Binding Board, Converter={StaticResource IntArrayToObservableCollectionConverter}}" ItemTemplate="{DynamicResource BoardTemplate}"/>
+        </Border>
+    </Grid>
+</Page>

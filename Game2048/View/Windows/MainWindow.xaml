@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="2048" Height="500" Width="500" MinWidth="500" MinHeight="500">
+        Title="2048" Height="500" Width="500" MinWidth="500" MinHeight="500" MaxWidth="500" MaxHeight="500"
+        Background="{StaticResource BackgroundColor}" WindowStartupLocation="CenterScreen" 
+        Icon="/View/Windows/2048_icon_512x512.png"
+        WindowStyle="None" AllowsTransparency="True">
     <Grid>
+        <Border x:Name="WindowBorder" Background="{StaticResource BackgroundColor}" BorderBrush="#0079CB" BorderThickness=".8">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="5" Color="#0079CB"/>
+            </Border.Effect>
+        </Border>
 
+        <Frame Source="/View/Pages/MenuPage.xaml" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

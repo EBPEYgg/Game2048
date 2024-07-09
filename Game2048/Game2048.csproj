@@ -8,8 +8,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Model\Services\" />
-    <Folder Include="View\Pages\" />
+    <None Remove="Resources\arrow_back_left_icon_128x_128.png" />
+    <None Remove="Resources\hamburger_black_icon_128x128.png" />
+    <None Remove="Resources\hamburger_blue_icon_128x128.png" />
+    <None Remove="Resources\reload_black_icon_128x128.png" />
+    <None Remove="Resources\reload_blue_icon_128x128.png" />
+    <None Remove="Resources\repeat_blue_icon_128x128.png" />
+    <None Remove="View\Windows\2048_icon_512x512.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\arrow_back_left_icon_128x_128.png" />
+    <Resource Include="Resources\hamburger_black_icon_128x128.png" />
+    <Resource Include="Resources\hamburger_blue_icon_128x128.png" />
+    <Resource Include="Resources\reload_black_icon_128x128.png" />
+    <Resource Include="Resources\reload_blue_icon_128x128.png" />
+    <Resource Include="Resources\repeat_blue_icon_128x128.png" />
+    <Resource Include="View\Windows\2048_icon_512x512.png" />
   </ItemGroup>
 
 </Project>

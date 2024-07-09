@@ -1,0 +1,69 @@
+﻿<Page x:Class="Game2048.View.Pages.StatisticsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm="clr-namespace:Game2048.ViewModel"
+      xmlns:local="clr-namespace:Game2048.View.Pages"
+      mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:StatisticsVM/>
+    </Page.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width=".5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource SmallButtonStyle}" Command="{Binding NavigateToMenuPage}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}}" Cursor="Hand" Margin="0,0,-200,0">
+                <Image Source="/Resources/arrow_back_left_icon_128x_128.png"/>
+            </Button>
+        </Grid>
+
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource TableBoardBorderStyle}">
+            <DataGrid ItemsSource="{Binding StatisticsCollection}" Style="{StaticResource StatisticsTableStyle}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Player" Binding="{Binding Name}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <StaticResource ResourceKey="StatisticsTableHeaderStyle"/>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <StaticResource ResourceKey="StatisticsTableRowStyle"/>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Width="*" Header="Best score" Binding="{Binding Score}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <StaticResource ResourceKey="StatisticsTableHeaderStyle"/>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <StaticResource ResourceKey="StatisticsTableRowStyle"/>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</Page>
