@@ -1,4 +1,5 @@
 ﻿using Game2048.Model;
+using Microsoft.VisualBasic;
 using System;
 using System.Windows;
 
@@ -396,22 +397,12 @@ namespace Game2048.ViewModel
         {
             string name;
 
-            do
+            name = Interaction.InputBox
+                ("Чтобы занести себя в статистику,\nвведите ваше имя: ", "Ввод имени", "");
+            if (!string.IsNullOrEmpty(name))
             {
-                name = Microsoft.VisualBasic.Interaction.InputBox
-                    ("Введите ваше имя: ", "Ввод имени", "");
-                if (string.IsNullOrEmpty(name))
-                {
-                    MessageBox.Show(
-                        "Имя не может быть пустым. ", 
-                        "Ошибка ввода", 
-                        MessageBoxButton.OK, 
-                        MessageBoxImage.Error);
-                }
+                Statistics.Add(name, Score.ToString());
             }
-            while (string.IsNullOrEmpty(name));
-
-            //Statistics.Add(name, Score.ToString());
         }
     }
 }

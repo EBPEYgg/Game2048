@@ -12,9 +12,9 @@ namespace Game2048.ViewModel
             get => new(NavigateToPage, new Uri("View/Pages/MenuPage.xaml", UriKind.RelativeOrAbsolute));
         }
 
-        //public ObservableCollection<Player> StatisticsCollection
-        //{
-        //    get => StatisticsSerializer.LoadPlayer(StatisticsCollection);
-        //}
+        public ObservableCollection<Player> StatisticsCollection
+        {
+            get => StatisticsSerializer.LoadPlayer();
+        }
     }
 }
