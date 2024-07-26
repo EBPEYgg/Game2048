@@ -1,19 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
 namespace Game2048.ViewModel
 {
-    public class MainVM : INotifyPropertyChanged
+    public class MainVM : ObservableObject
     {
-        /// <summary>
-        /// Событие, отслеживающее изменение значения свойства контакта.
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         /// <summary>
         /// Конструктор класса <see cref="MainVM"/>.
         /// </summary>
@@ -22,28 +15,9 @@ namespace Game2048.ViewModel
 
         }
 
-        /// <summary>
-        /// Метод, который вызывает событие <see cref="PropertyChanged"/>.
-        /// </summary>
-        /// <param name="propertyName">Название измененного свойства.</param>
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        protected bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
         protected void NavigateToPage(Page page, Uri uri)
         {
             NavigationService.GetNavigationService(page).Navigate(uri);
-        }
-
-        protected void Quit()
-        {
-            Application.Current.Shutdown();
         }
     }
 }

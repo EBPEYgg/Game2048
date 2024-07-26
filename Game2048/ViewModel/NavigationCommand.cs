@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Game2048.ViewModel
 {
     /// <summary>
     /// Класс, описывающий команду для навигации в игре.
     /// </summary>
-    public class NavigationCommand : BaseCommand
+    public class NavigationCommand : ICommand
     {
+        public event EventHandler CanExecuteChanged;
+
         /// <summary>
         /// Действие, которое должно быть выполнено при выполнении команды.
         /// </summary>
@@ -34,7 +37,16 @@ namespace Game2048.ViewModel
         /// Метод, который выполняет действие, связанное с командой.
         /// </summary>
         /// <param name="parameter">Параметр команды.</param>
-        public override void Execute(object parameter)
+        public void Execute(object parameter)
             => _executeAction.Invoke((Page) parameter, _uri);
+
+        /// <summary>
+        /// Метод, который определяет, может ли 
+        /// команда быть выполнена в текущем состоянии.
+        /// </summary>
+        /// <param name="parameter">Параметр команды.</param>
+        /// <returns>True, если команда может быть выполнена; иначе false.</returns>
+        public bool CanExecute(object parameter)
+            => true;
     }
 }

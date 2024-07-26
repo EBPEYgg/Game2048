@@ -1,11 +1,12 @@
-﻿using Game2048.Model;
+﻿using CommunityToolkit.Mvvm.Input;
+using Game2048.Model;
 using Microsoft.VisualBasic;
 using System;
 using System.Windows;
 
 namespace Game2048.ViewModel
 {
-    public class GameVM : MainVM
+    public partial class GameVM : MainVM
     {
         /// <summary>
         /// Инициализация игровой доски.
@@ -23,7 +24,11 @@ namespace Game2048.ViewModel
         public int[,] Board
         {
             get => gameBoard.board;
-            private set => Set(ref gameBoard.board, value);
+            private set
+            {
+                gameBoard.board = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -32,7 +37,11 @@ namespace Game2048.ViewModel
         public int Score
         { 
             get => gameBoard.score; 
-            private set => Set(ref gameBoard.score, value);
+            private set
+            {
+                gameBoard.score = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -44,56 +53,205 @@ namespace Game2048.ViewModel
         }
 
         /// <summary>
-        /// Команда, которая отвечает за сдвиг влево.
-        /// </summary>
-        public RelayCommand ShiftLeftCommand
-        {
-            get => new(ShiftLeft);
-        }
-
-        /// <summary>
-        /// Команда, которая отвечает за сдвиг вверх.
-        /// </summary>
-        public RelayCommand ShiftUpCommand
-        {
-            get => new(ShiftUp);
-        }
-
-        /// <summary>
-        /// Команда, которая отвечает за сдвиг вправо.
-        /// </summary>
-        public RelayCommand ShiftRightCommand
-        {
-            get => new(ShiftRight);
-        }
-
-        /// <summary>
-        /// Команда, которая отвечает за сдвиг вниз.
-        /// </summary>
-        public RelayCommand ShiftBottomCommand
-        {
-            get => new(ShiftBottom);
-        }
-
-        /// <summary>
-        /// Команда, которая сбрасывает доску игры.
-        /// </summary>
-        public RelayCommand ResetCommand
-        {
-            get => new(Reset);
-        }
-
-        /// <summary>
         /// Конструктор класса <see cref="GameVM"/>.
         /// </summary>
         public GameVM()
         {
             gameBoard = new GameBoard();
             random = new Random();
-
             Reset();
         }
 
+        #region Commands
+        /// <summary>
+        /// Команда, отвечающая за сдвиг влево.
+        /// </summary>
+        [RelayCommand]
+        public void ShiftLeft()
+        {
+            bool shifted = false;
+            for (int i = 0; i < gameBoard.board.GetLength(0); i++)
+            {
+                int index = 0;
+                for (int j = 0; j < gameBoard.board.GetLength(1); j++)
+                {
+                    if (gameBoard.board[i, j] != 0)
+                    {
+                        if (index > 0 && gameBoard.board[i, index - 1] == gameBoard.board[i, j])
+                        {
+                            gameBoard.board[i, index - 1] *= 2;
+                            gameBoard.board[i, j] = 0;
+                            shifted = true;
+                            gameBoard.score += gameBoard.board[i, index - 1];
+                        }
+
+                        else
+                        {
+                            if (j != index)
+                            {
+                                gameBoard.board[i, index] = gameBoard.board[i, j];
+                                gameBoard.board[i, j] = 0;
+                                shifted = true;
+                            }
+                            index++;
+                        }
+                    }
+                }
+            }
+
+            if (shifted)
+            {
+                GenerateRandomNumber();
+                CheckGameState();
+            }
+        }
+
+        /// <summary>
+        /// Команда, отвечающая за сдвиг вверх.
+        /// </summary>
+        [RelayCommand]
+        public void ShiftUp()
+        {
+            bool shifted = false;
+            for (int j = 0; j < gameBoard.board.GetLength(1); j++)
+            {
+                int index = 0;
+                for (int i = 0; i < gameBoard.board.GetLength(0); i++)
+                {
+                    if (gameBoard.board[i, j] != 0)
+                    {
+                        if (index > 0 && gameBoard.board[index - 1, j] == gameBoard.board[i, j])
+                        {
+                            gameBoard.board[index - 1, j] *= 2;
+                            gameBoard.board[i, j] = 0;
+                            shifted = true;
+                            gameBoard.score += gameBoard.board[index - 1, j];
+                        }
+
+                        else
+                        {
+                            if (i != index)
+                            {
+                                gameBoard.board[index, j] = gameBoard.board[i, j];
+                                gameBoard.board[i, j] = 0;
+                                shifted = true;
+                            }
+                            index++;
+                        }
+                    }
+                }
+            }
+
+            if (shifted)
+            {
+                GenerateRandomNumber();
+                CheckGameState();
+            }
+        }
+
+        /// <summary>
+        /// Команда, отвечающая за сдвиг вправо.
+        /// </summary>
+        [RelayCommand]
+        public void ShiftRight()
+        {
+            bool shifted = false;
+            for (int i = 0; i < gameBoard.board.GetLength(0); i++)
+            {
+                int index = gameBoard.board.GetLength(1) - 1;
+                for (int j = gameBoard.board.GetLength(1) - 1; j >= 0; j--)
+                {
+                    if (gameBoard.board[i, j] != 0)
+                    {
+                        if (index < gameBoard.board.GetLength(1) - 1 &&
+                            gameBoard.board[i, index + 1] == gameBoard.board[i, j])
+                        {
+                            gameBoard.board[i, index + 1] *= 2;
+                            gameBoard.board[i, j] = 0;
+                            shifted = true;
+                            gameBoard.score += gameBoard.board[i, index + 1];
+                        }
+
+                        else
+                        {
+                            if (j != index)
+                            {
+                                gameBoard.board[i, index] = gameBoard.board[i, j];
+                                gameBoard.board[i, j] = 0;
+                                shifted = true;
+                            }
+                            index--;
+                        }
+                    }
+                }
+            }
+
+            if (shifted)
+            {
+                GenerateRandomNumber();
+                CheckGameState();
+            }
+        }
+
+        /// <summary>
+        /// Команда, отвечающая за сдвиг вниз.
+        /// </summary>
+        [RelayCommand]
+        public void ShiftBottom()
+        {
+            bool shifted = false;
+            for (int j = 0; j < gameBoard.board.GetLength(1); j++)
+            {
+                int index = gameBoard.board.GetLength(0) - 1;
+                for (int i = gameBoard.board.GetLength(0) - 1; i >= 0; i--)
+                {
+                    if (gameBoard.board[i, j] != 0)
+                    {
+                        if (index < gameBoard.board.GetLength(0) - 1 &&
+                            gameBoard.board[index + 1, j] == gameBoard.board[i, j])
+                        {
+                            gameBoard.board[index + 1, j] *= 2;
+                            gameBoard.board[i, j] = 0;
+                            shifted = true;
+                            gameBoard.score += gameBoard.board[index + 1, j];
+                        }
+
+                        else
+                        {
+                            if (i != index)
+                            {
+                                gameBoard.board[index, j] = gameBoard.board[i, j];
+                                gameBoard.board[i, j] = 0;
+                                shifted = true;
+                            }
+                            index--;
+                        }
+                    }
+                }
+            }
+
+            if (shifted)
+            {
+                GenerateRandomNumber();
+                CheckGameState();
+            }
+        }
+
+        /// <summary>
+        /// Команда, которая сбрасывает доску и очки в игре.
+        /// </summary>
+        [RelayCommand]
+        private void Reset()
+        {
+            Board = new int[gameBoard.BoardSize, gameBoard.BoardSize];
+            Score = 0;
+            GenerateRandomNumber();
+            GenerateRandomNumber();
+            Update();
+        }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Метод, который проверяет, выиграл ли игрок.
         /// </summary>
@@ -163,18 +321,6 @@ namespace Game2048.ViewModel
         }
 
         /// <summary>
-        /// Метод, который сбрасывает доску и очки в игре.
-        /// </summary>
-        private void Reset()
-        {
-            Board = new int[gameBoard.BoardSize, gameBoard.BoardSize];
-            Score = 0;
-            GenerateRandomNumber();
-            GenerateRandomNumber();
-            Update();
-        }
-
-        /// <summary>
         /// Метод, который генерирует ячейку на доске.
         /// </summary>
         private void GenerateRandomNumber()
@@ -198,176 +344,6 @@ namespace Game2048.ViewModel
         {
             Board = gameBoard.Board;
             Score = gameBoard.Score;
-        }
-
-        /// <summary>
-        /// Метод, отвечающий за сдвиг влево.
-        /// </summary>
-        public void ShiftLeft()
-        {
-            bool shifted = false;
-            for (int i = 0; i < gameBoard.board.GetLength(0); i++)
-            {
-                int index = 0;
-                for (int j = 0; j < gameBoard.board.GetLength(1); j++)
-                {
-                    if (gameBoard.board[i, j] != 0)
-                    {
-                        if (index > 0 && gameBoard.board[i, index - 1] == gameBoard.board[i, j])
-                        {
-                            gameBoard.board[i, index - 1] *= 2;
-                            gameBoard.board[i, j] = 0;
-                            shifted = true;
-                            gameBoard.score += gameBoard.board[i, index - 1];
-                        }
-
-                        else
-                        {
-                            if (j != index)
-                            {
-                                gameBoard.board[i, index] = gameBoard.board[i, j];
-                                gameBoard.board[i, j] = 0;
-                                shifted = true;
-                            }
-                            index++;
-                        }
-                    }
-                }
-            }
-
-            if (shifted)
-            {
-                GenerateRandomNumber();
-                CheckGameState();
-            }
-        }
-
-        /// <summary>
-        /// Метод, отвечающий за сдвиг вверх.
-        /// </summary>
-        public void ShiftUp()
-        {
-            bool shifted = false;
-            for (int j = 0; j < gameBoard.board.GetLength(1); j++)
-            {
-                int index = 0;  
-                for (int i = 0; i < gameBoard.board.GetLength(0); i++)
-                {
-                    if (gameBoard.board[i, j] != 0)
-                    {
-                        if (index > 0 && gameBoard.board[index - 1, j] == gameBoard.board[i, j])
-                        {
-                            gameBoard.board[index - 1, j] *= 2;
-                            gameBoard.board[i, j] = 0;
-                            shifted = true;
-                            gameBoard.score += gameBoard.board[index - 1, j];
-                        }
-
-                        else
-                        {
-                            if (i != index)
-                            {
-                                gameBoard.board[index, j] = gameBoard.board[i, j];
-                                gameBoard.board[i, j] = 0;
-                                shifted = true;
-                            }
-                            index++;
-                        }
-                    }
-                }
-            }
-
-            if (shifted)
-            {
-                GenerateRandomNumber();
-                CheckGameState();
-            }
-        }
-
-        /// <summary>
-        /// Метод, отвечающий за сдвиг вправо.
-        /// </summary>
-        public void ShiftRight()
-        {
-            bool shifted = false;
-            for (int i = 0; i < gameBoard.board.GetLength(0); i++)
-            {
-                int index = gameBoard.board.GetLength(1) - 1;
-                for (int j = gameBoard.board.GetLength(1) - 1; j >= 0; j--)
-                {
-                    if (gameBoard.board[i, j] != 0)
-                    {
-                        if (index < gameBoard.board.GetLength(1) - 1 && 
-                            gameBoard.board[i, index + 1] == gameBoard.board[i, j])
-                        {
-                            gameBoard.board[i, index + 1] *= 2;
-                            gameBoard.board[i, j] = 0;
-                            shifted = true;
-                            gameBoard.score += gameBoard.board[i, index + 1];
-                        }
-
-                        else
-                        {
-                            if (j != index)
-                            {
-                                gameBoard.board[i, index] = gameBoard.board[i, j];
-                                gameBoard.board[i, j] = 0;
-                                shifted = true;
-                            }
-                            index--;
-                        }
-                    }
-                }
-            }
-
-            if (shifted)
-            {
-                GenerateRandomNumber();
-                CheckGameState();
-            }
-        }
-
-        /// <summary>
-        /// Метод, отвечающий за сдвиг вниз.
-        /// </summary>
-        public void ShiftBottom()
-        {
-            bool shifted = false;
-            for (int j = 0; j < gameBoard.board.GetLength(1); j++)
-            {
-                int index = gameBoard.board.GetLength(0) - 1;
-                for (int i = gameBoard.board.GetLength(0) - 1; i >= 0; i--)
-                {
-                    if (gameBoard.board[i, j] != 0)
-                    {
-                        if (index < gameBoard.board.GetLength(0) - 1 && 
-                            gameBoard.board[index + 1, j] == gameBoard.board[i, j])
-                        {
-                            gameBoard.board[index + 1, j] *= 2;
-                            gameBoard.board[i, j] = 0;
-                            shifted = true;
-                            gameBoard.score += gameBoard.board[index + 1, j];
-                        }
-
-                        else
-                        {
-                            if (i != index)
-                            {
-                                gameBoard.board[index, j] = gameBoard.board[i, j];
-                                gameBoard.board[i, j] = 0;
-                                shifted = true;
-                            }
-                            index--;
-                        }
-                    }
-                }
-            }
-
-            if (shifted)
-            {
-                GenerateRandomNumber();
-                CheckGameState();
-            }
         }
 
         /// <summary>
@@ -404,5 +380,6 @@ namespace Game2048.ViewModel
                 Statistics.Add(name, Score.ToString());
             }
         }
+        #endregion
     }
 }

@@ -1,8 +1,8 @@
-﻿using Game2048.ViewModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Game2048.Model
 {
-    public class GameBoard : MainVM
+    public partial class GameBoard : ObservableObject
     {
         /// <summary>
         /// Размер доски.
@@ -17,21 +17,13 @@ namespace Game2048.Model
         /// <summary>
         /// Значения ячеек на доске.
         /// </summary>
+        [ObservableProperty]
         public int[,]? board;
 
         /// <summary>
         /// Счет.
         /// </summary>
+        [ObservableProperty]
         public int score;
-
-        /// <summary>
-        /// Возвращает и задает значения ячеек на доске.
-        /// </summary>
-        public int[,]? Board { get => board; set => Set(ref board, value); }
-        
-        /// <summary>
-        /// Возвращает и задает счет.
-        /// </summary>
-        public int Score { get => score; set => Set(ref score, value); }
     }
 }
